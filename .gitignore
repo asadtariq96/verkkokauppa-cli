@@ -1,6 +1,7 @@
 # Build artifacts
 /verkkokauppa-pp-cli
 /verkkokauppa-pp-cli.exe
+/verkkokauppa-cli.exe
 /verkkokauppa-pp-mcp
 /verkkokauppa-pp-mcp.exe
 /build/stage/
