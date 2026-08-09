@@ -344,6 +344,44 @@ verkkokauppa-pp-cli fi search-products --filter-q "ssd" --session-id <uuid> \
   --page-number 2 --page-size 48 --json
 ```
 
+## Transcendence commands (`vk`)
+
+**`vk deals`** — find best-value products by a 0–100 "worth buying" score
+composed of discount %, live availability, rating and price band:
+
+```bash
+verkkokauppa-pp-cli vk deals "näytönohjain" --size 20
+verkkokauppa-pp-cli vk deals "iphone" --min-discount 10 --category information_technology --json
+```
+
+**`vk categories`** — render the category facet tree (with hit counts) from a
+search, and drill down with `--category`:
+
+```bash
+verkkokauppa-pp-cli vk categories --query "ssd" --depth 3
+verkkokauppa-pp-cli vk categories --category audio_and_video --json
+```
+
+**`vk watch`** — track price and stock changes for saved searches. State is
+persisted to `watch.json` in the CLI data directory:
+
+```bash
+verkkokauppa-pp-cli vk watch add "rtx 5060"            # start watching a search
+verkkokauppa-pp-cli vk watch add "iphone" --category information_technology
+verkkokauppa-pp-cli vk watch list                       # saved watches
+verkkokauppa-pp-cli vk watch check --size 10            # re-run + report deltas (price ▼/▲, stock flips)
+verkkokauppa-pp-cli vk watch remove 2                   # stop watching by id
+```
+
+Example delta output from `vk watch check`:
+
+```
+[watch #1] "rtx 5060"
+  PID     NAME                                        PRICE   STOCK     CHANGE
+  986908  Gigabyte RTX 5060 Ti WINDFORCE OC 8 Gt …    439.00  InStock   ▼ 60.99 (12%)
+  987769  ASUS Prime GeForce RTX 5060 8 Gt GDDR7 …    469.00  SoldOut   stock: OutOfStock -> SoldOut
+```
+
 ## Troubleshooting
 **Not found errors (exit code 3)**
 - Check the resource ID is correct

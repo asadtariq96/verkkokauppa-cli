@@ -356,6 +356,7 @@ Run 'verkkokauppa-pp-cli doctor' to verify auth and connectivity.`,
 	rootCmd.AddCommand(newWorkflowCmd(flags))
 	rootCmd.AddCommand(newAPICmd(flags))
 	rootCmd.AddCommand(newInfoPromotedCmd(flags))
+	rootCmd.AddCommand(newVkCmd(flags))
 	rootCmd.AddCommand(newVersionCmd())
 	// Self-learning loop commands. newLearnConfig (defined in
 	// learn_init.go) reads spec.Learn.TickerPatterns + Stopwords and
