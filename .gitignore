@@ -1,0 +1,17 @@
+# Build artifacts
+/verkkokauppa-pp-cli
+/verkkokauppa-pp-cli.exe
+/verkkokauppa-pp-mcp
+/verkkokauppa-pp-mcp.exe
+/build/stage/
+*.mcpb
+
+# Runtime data (local cache / SQLite / config)
+.verkkokauppa-*/
+*.db
+*.db-journal
+receipts/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
