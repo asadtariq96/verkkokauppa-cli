@@ -18,4 +18,7 @@ receipts/
 Thumbs.db
 __pycache__/
 *.pyc
-/bin/
+/bin/verkkokauppa-pp-cli
+/bin/verkkokauppa-pp-cli.exe
+/bin/verkkokauppa-pp-mcp
+/bin/verkkokauppa-pp-mcp.exe
