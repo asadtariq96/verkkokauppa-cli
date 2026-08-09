@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# vk-stock launcher -> bin/vk-stock.py (python)
+cd "$(cd "$(dirname "$0")" && pwd)" || exit 1
+exec python vk-stock.py "$@"

@@ -1,0 +1,108 @@
+{
+  "api_name": "verkkokauppa",
+  "base_url": "https://search.service.verkkokauppa.com",
+  "description": "Search, filter, price, and availability data for Verkkokauppa.com, Finland's largest consumer-electronics retailer.",
+  "mcp_ready": "full",
+  "http_transport": "standard",
+  "auth": {
+    "type": "none"
+  },
+  "required_headers": [],
+  "tools": [
+    {
+      "name": "fi_get-availability",
+      "description": "Returns per-store and per-channel stock, purchase eligibility and flags (sold out, preorder, in campaign) for one or more product ids. Required: pids.",
+      "method": "GET",
+      "path": "/fi/api/v1/availability",
+      "no_auth": true,
+      "params": [
+        {
+          "name": "pids",
+          "type": "string",
+          "location": "query",
+          "description": "Comma-separated product ids",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "fi_search-products",
+      "description": "Returns product search results. Prices and basic availability flags are embedded in each product; facets (category, price range, brand, etc.) are returned in `included`. A `sessionId` (any UUID) is required. Required: sessionId. Optional: filter_q, filter_category, filter_price (plus 4 more).",
+      "method": "GET",
+      "path": "/fi/api/v1/product-search",
+      "no_auth": true,
+      "params": [
+        {
+          "name": "filter_q",
+          "wire_name": "filter[q]",
+          "type": "string",
+          "location": "query",
+          "description": "Free-text search query"
+        },
+        {
+          "name": "filter_category",
+          "wire_name": "filter[category]",
+          "type": "string",
+          "location": "query",
+          "description": "Category facet key to narrow results (e.g. information_technology)"
+        },
+        {
+          "name": "filter_price",
+          "wire_name": "filter[price]",
+          "type": "string",
+          "location": "query",
+          "description": "Price range as `min-max` in euros"
+        },
+        {
+          "name": "page_number",
+          "wire_name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "wire_name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "Page size"
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Sorting (e.g. -score, price, -price, newest, -rating)"
+        },
+        {
+          "name": "sessionId",
+          "type": "string",
+          "location": "query",
+          "description": "Any UUID identifying the browsing session",
+          "required": true
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "Include"
+        }
+      ]
+    },
+    {
+      "name": "info_get-product",
+      "description": "Returns price, discount, brand and category breadcrumbs for one or more product ids. Required: pids.",
+      "method": "GET",
+      "path": "/api/v1/info",
+      "no_auth": true,
+      "params": [
+        {
+          "name": "pids",
+          "type": "string",
+          "location": "query",
+          "description": "Comma-separated product ids",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

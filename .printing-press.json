@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-08-09T03:49:41.9059521Z",
+  "printing_press_version": "4.30.1",
+  "api_name": "verkkokauppa",
+  "display_name": "Verkkokauppa Com Product",
+  "cli_name": "verkkokauppa-pp-cli",
+  "creator": {
+    "handle": "asadtariq96"
+  },
+  "owner": "asadtariq96",
+  "printer": "asadtariq96",
+  "spec_path": "openapi.yaml",
+  "spec_format": "openapi3",
+  "spec_checksum": "sha256:4ab4ee72da52e248fb7d38c48573537a0a3c0e71092b6b89bf61f89ce6fbcbad",
+  "run_id": "20260809-034941",
+  "category": "commerce",
+  "description": "Search, filter, price, and availability data for Verkkokauppa.com, Finland's largest consumer-electronics retailer.",
+  "mcp_binary": "verkkokauppa-pp-mcp",
+  "mcp_tool_count": 3,
+  "mcp_public_tool_count": 3,
+  "mcp_ready": "full",
+  "api_version": "1.0.0",
+  "auth_type": "none",
+  "auth_env_vars": [
+    "PRINTING_PRESS_CLIENT_PROFILE"
+  ],
+  "auth_env_var_specs": [
+    {
+      "name": "PRINTING_PRESS_CLIENT_PROFILE",
+      "kind": "per_call",
+      "required": true,
+      "sensitive": false
+    }
+  ],
+  "verify": {
+    "mode": "mock",
+    "pass_rate": 100,
+    "passed": 27,
+    "total": 27,
+    "data_pipeline": true,
+    "verdict": "PASS"
+  },
+  "scorecard": {
+    "steinberger": {
+      "percentage": 80,
+      "grade": "A (1 of 24 dimensions unverified: live_api_verification)",
+      "total": 80
+    },
+    "unverified_dimensions": [
+      "live_api_verification"
+    ]
+  }
+}
