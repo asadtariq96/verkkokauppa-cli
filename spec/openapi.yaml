@@ -1,0 +1,294 @@
+openapi: 3.0.0
+info:
+  title: Verkkokauppa.com Product API
+  version: 1.0.0
+  description: >
+    Search, filter, price, and availability data for Verkkokauppa.com, Finland's
+    largest consumer-electronics retailer. Three public JSON services power the
+    web storefront: search (query + filters + facets + sort + pagination, with
+    prices embedded), availability (per-store stock), and product info
+    (brand, category, price, discount). No API key is required; the search
+    service only needs a random UUID sessionId.
+x-cli-description: Search, filter, price, and check availability on Verkkokauppa.com
+servers:
+  - url: https://search.service.verkkokauppa.com
+    description: Search service (default)
+paths:
+  /fi/api/v1/product-search:
+    servers:
+      - url: https://search.service.verkkokauppa.com
+    get:
+      operationId: searchProducts
+      summary: Search products with filters, sorting and facets
+      description: >
+        Returns product search results. Prices and basic availability flags are
+        embedded in each product; facets (category, price range, brand, etc.)
+        are returned in `included`. A `sessionId` (any UUID) is required.
+      parameters:
+        - name: filter[q]
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Free-text search query
+        - name: filter[category]
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Category facet key to narrow results (e.g. information_technology)
+        - name: filter[price]
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Price range as `min-max` in euros
+        - name: page[number]
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: page[size]
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 48
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            default: -score
+          description: Sorting (e.g. -score, price, -price, newest, -rating)
+        - name: sessionId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Any UUID identifying the browsing session
+        - name: include
+          in: query
+          required: false
+          schema:
+            type: string
+            default: campaigns,category,salesCategories.parent,facets
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /fi/api/v1/availability:
+    servers:
+      - url: https://product.service.verkkokauppa.com
+    get:
+      operationId: getAvailability
+      summary: Get stock availability for product ids
+      description: >
+        Returns per-store and per-channel stock, purchase eligibility and flags
+        (sold out, preorder, in campaign) for one or more product ids.
+      parameters:
+        - name: pids
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Comma-separated product ids
+      responses:
+        '200':
+          description: Availability per product
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Availability'
+  /api/v1/info:
+    servers:
+      - url: https://api.verkkokauppa.com
+    get:
+      operationId: getProductInfo
+      summary: Get price, brand and category info for product ids
+      description: >
+        Returns price, discount, brand and category breadcrumbs for one or more
+        product ids.
+      parameters:
+        - name: pids
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Comma-separated product ids
+      responses:
+        '200':
+          description: Product info per product
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductInfo'
+components:
+  schemas:
+    SearchResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        meta:
+          type: object
+          additionalProperties: true
+          properties:
+            totalResults:
+              type: integer
+            provider:
+              type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        included:
+          type: array
+          additionalProperties: true
+          items:
+            type: object
+            additionalProperties: true
+    Product:
+      type: object
+      additionalProperties: true
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ProductAttributes'
+        relationships:
+          type: object
+          additionalProperties: true
+    ProductAttributes:
+      type: object
+      additionalProperties: true
+      properties:
+        name:
+          type: string
+        href:
+          type: string
+        price:
+          $ref: '#/components/schemas/Price'
+        rating:
+          type: object
+          additionalProperties: true
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+        bulletPoints:
+          type: array
+          items:
+            type: string
+        images:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    Article:
+      type: object
+      additionalProperties: true
+      properties:
+        articleId:
+          type: integer
+        eans:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        href:
+          type: string
+    Price:
+      type: object
+      additionalProperties: true
+      properties:
+        current:
+          type: number
+        currentFormatted:
+          type: string
+        original:
+          type: number
+        originalFormatted:
+          type: string
+        taxRate:
+          type: number
+        discount:
+          type: object
+          additionalProperties: true
+        currency:
+          type: string
+    Availability:
+      type: object
+      additionalProperties: true
+      properties:
+        pid:
+          type: integer
+        overrideText:
+          type: string
+        flags:
+          type: object
+          additionalProperties: true
+          properties:
+            isSoldOut:
+              type: boolean
+            isPreorder:
+              type: boolean
+            isInCampaign:
+              type: boolean
+            isInStoresOnly:
+              type: boolean
+            isShippingAllowed:
+              type: boolean
+            isPickupAllowed:
+              type: boolean
+        status:
+          type: object
+          additionalProperties: true
+          properties:
+            og:
+              type: string
+            schema:
+              type: string
+        stocks:
+          type: object
+          additionalProperties: true
+          properties:
+            shipment:
+              type: object
+              additionalProperties: true
+            stores:
+              type: array
+              items:
+                type: object
+                additionalProperties: true
+    ProductInfo:
+      type: object
+      additionalProperties: true
+      properties:
+        item_id:
+          type: integer
+        item_name:
+          type: string
+        currency:
+          type: string
+        price:
+          type: number
+        discount:
+          type: number
+        item_brand:
+          type: string
+        item_category:
+          type: string
+        item_type:
+          type: string
